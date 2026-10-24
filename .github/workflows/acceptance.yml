@@ -1,0 +1,84 @@
+name: Framework adapter acceptance
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }} / ${{ matrix.frameworks }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: '3.10'
+            frameworks: minimum
+            os: ubuntu-24.04
+            consumer-python: consumer/bin/python
+          - python: '3.12'
+            frameworks: latest
+            os: ubuntu-24.04
+            consumer-python: consumer/bin/python
+          - python: '3.14'
+            frameworks: latest
+            os: ubuntu-24.04
+            consumer-python: consumer/bin/python
+          - python: '3.12'
+            frameworks: latest
+            os: windows-2022
+            consumer-python: consumer/Scripts/python.exe
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install real framework and released core SDK
+        run: |
+          python -m pip install --upgrade pip
+          if [ '${{ matrix.frameworks }}' = minimum ]; then
+            echo 'llama-index-core==0.11.0' > constraints.txt
+            export PIP_CONSTRAINT="$PWD/constraints.txt"
+          fi
+          python -m pip install 'https://github.com/originchaindb/originchain-python/releases/download/v0.10.0-rc.3/originchain-0.10.0rc3-py3-none-any.whl#sha256=1d6456e7bc51e0dfb4b0d03ef4e0713f2cd3c902e4579a7fb956e5fb6e59c647'
+          python -m pip install '.[dev]' build twine
+          python -m pip freeze > dependencies.txt
+          python -m pip check
+      - name: Real framework contracts and mocked HTTP regressions
+        run: |
+          python -m pytest -q --import-mode=importlib tests --junitxml=framework-tests.xml
+          python -m ruff check src tests
+          python -m ruff format --check src tests
+      - name: Build wheel and sdist
+        run: |
+          python -m build
+          python -m twine check dist/*
+      - name: Fresh-install exact wheels and repeat acceptance
+        run: |
+          python -m venv consumer
+          if [ '${{ matrix.frameworks }}' = minimum ]; then
+            export PIP_CONSTRAINT="$PWD/constraints.txt"
+          fi
+          '${{ matrix.consumer-python }}' -m pip install 'https://github.com/originchaindb/originchain-python/releases/download/v0.10.0-rc.3/originchain-0.10.0rc3-py3-none-any.whl#sha256=1d6456e7bc51e0dfb4b0d03ef4e0713f2cd3c902e4579a7fb956e5fb6e59c647'
+          '${{ matrix.consumer-python }}' -m pip install dist/*.whl pytest
+          '${{ matrix.consumer-python }}' -m pip check
+          '${{ matrix.consumer-python }}' -m pytest -q --import-mode=importlib tests --junitxml=installed-tests.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: adapter-${{ matrix.os }}-${{ matrix.python }}-${{ matrix.frameworks }}
+          path: |
+            framework-tests.xml
+            installed-tests.xml
+            dependencies.txt
+            dist/*
+            SOURCE_PROVENANCE.json

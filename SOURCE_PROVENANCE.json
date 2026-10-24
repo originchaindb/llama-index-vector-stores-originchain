@@ -1,0 +1,18 @@
+{
+  "canonical_source_commit": "5a4da3abdd051c584f4d3848155b06cf8aaf306b",
+  "source_path": "sdk/llama-index-vector-stores-originchain",
+  "runtime_and_tests_unchanged": true,
+  "license": "Proprietary",
+  "exported_source_sha256": {
+    "src/llama_index/vector_stores/originchain/__init__.py": "ed30f3ed02651c400b1f3e2ef338995fda753fc42355d7d5541678afc3402057",
+    "src/llama_index/vector_stores/originchain/_support.py": "aeda76d544a45cd1f28775b967cc9cf07e92c36a3786fc808191e576fbea1a3c",
+    "src/llama_index/vector_stores/originchain/base.py": "dfa3f2a7f5d55de9f6a2ad9b5c0c8037389022af234c43db495235ce7ada4015",
+    "tests/conftest.py": "522ed37bfd2d21775b225f68aca887cc03fdba01026f0ba31b6cab066ec5b0ba",
+    "tests/test_vectorstore_interface.py": "fc2102cd2efc80eeff31aa7d5fb42e690075bdba26464cfa78805c2f2d35d784"
+  },
+  "publication_changes": [
+    "Public repository URLs in package metadata",
+    "Current GitHub installation instructions and explicit existing license",
+    "Public package acceptance workflow"
+  ]
+}

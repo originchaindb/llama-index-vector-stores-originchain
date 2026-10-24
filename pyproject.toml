@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "llama-index-vector-stores-originchain"
+version = "0.1.0rc1"
+description = "LlamaIndex VectorStore integration for OriginChain - the managed database for AI applications."
+readme = "README.md"
+authors = [{ name = "Silicoyn Technologies", email = "support@originchain.ai" }]
+license = { text = "Proprietary" }
+requires-python = ">=3.10"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "llama-index-core>=0.11.0,<1",
+  "originchain>=0.10.0rc1,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "ruff>=0.5",
+  "mypy>=1.10",
+]
+
+[project.urls]
+Homepage      = "https://originchaindb.com"
+Documentation = "https://originchaindb.com/docs"
+Source = "https://github.com/originchaindb/llama-index-vector-stores-originchain"
+Issues = "https://github.com/originchaindb/llama-index-vector-stores-originchain/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llama_index"]
+core-metadata-version = "2.4"
+
+[tool.hatch.build.targets.sdist]
+core-metadata-version = "2.4"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]
