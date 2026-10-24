@@ -62,6 +62,7 @@ jobs:
         run: |
           python -m build
           python -m twine check dist/*
+          python -c "import pathlib,tarfile,subprocess; p=next(pathlib.Path('dist').glob('*.tar.gz')); a=tarfile.open(p); files={x.name.split('/',1)[1]:a.extractfile(x).read() for x in a.getmembers() if x.isfile()}; tracked=subprocess.check_output(['git','ls-files'],text=True).splitlines(); assert set(files)==set(tracked)|{'PKG-INFO'}; assert all(files[f]==pathlib.Path(f).read_bytes() for f in tracked)"
       - name: Fresh-install exact wheels and repeat acceptance
         run: |
           python -m venv consumer
