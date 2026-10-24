@@ -38,8 +38,8 @@ jobs:
             os: windows-2022
             consumer-python: consumer/Scripts/python.exe
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: ${{ matrix.python }}
       - name: Install real framework and released core SDK
@@ -73,7 +73,7 @@ jobs:
           '${{ matrix.consumer-python }}' -m pip install dist/*.whl pytest
           '${{ matrix.consumer-python }}' -m pip check
           '${{ matrix.consumer-python }}' -m pytest -q --import-mode=importlib tests --junitxml=installed-tests.xml
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: adapter-${{ matrix.os }}-${{ matrix.python }}-${{ matrix.frameworks }}
