@@ -9,13 +9,19 @@ declaration is unchanged. No open-source license is granted by this release.
 ## Install
 
 Requires Python 3.10+, LlamaIndex Core 0.11 or newer (below 1.0), and the
-OriginChain Python SDK 0.10.0rc1 or newer (below 1.0). These commands install the
-tested core SDK and adapter from GitHub; the adapter is not published to PyPI.
+OriginChain Python SDK 0.10.0rc1 or newer (below 1.0). These commands install a pinned development version of the core SDK and the
+existing adapter preview. Git must be installed; the adapter is not on PyPI.
 
 ```bash
-python -m pip install "https://github.com/originchaindb/originchain-python/releases/download/v0.10.0-rc.3/originchain-0.10.0rc3-py3-none-any.whl#sha256=1d6456e7bc51e0dfb4b0d03ef4e0713f2cd3c902e4579a7fb956e5fb6e59c647"
+python -m pip install "originchain @ git+https://github.com/originchaindb/originchaindb-python.git@944cd410ffb11110c00ce925c0c609e11862916b"
 python -m pip install https://github.com/originchaindb/llama-index-vector-stores-originchain/releases/download/v0.1.0-rc.1/llama_index_vector_stores_originchain-0.1.0rc1-py3-none-any.whl
 ```
+
+The core SDK remains imported as `originchain`; its maintained repository is
+`originchaindb-python`. This source pin is `0.11.0.dev0`, which is unreleased.
+The adapter's `0.1.0rc1` release and proprietary license are unchanged. See the
+[SDK support matrix](https://github.com/originchaindb/.github/blob/main/SDK-SUPPORT.md) for the distinction between source verification and
+published packages.
 
 ## Store, query and delete a node
 
