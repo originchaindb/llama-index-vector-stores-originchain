@@ -56,8 +56,8 @@ jobs:
       - name: Real framework contracts and mocked HTTP regressions
         run: |
           python -m pytest -q --import-mode=importlib tests --junitxml=framework-tests.xml
-          python -m ruff check src tests
-          python -m ruff format --check src tests
+          python -m ruff check src tests examples
+          python -m ruff format --check src tests examples
       - name: Build wheel and sdist
         run: |
           python -m build
